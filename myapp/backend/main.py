@@ -10,7 +10,7 @@ import redis
 import time 
 import random
 
-app = FastAPI()
+app = FastAPI(title="My API", version="1.0.0")
 
 Base.metadata.create_all(bind = engine)
 
