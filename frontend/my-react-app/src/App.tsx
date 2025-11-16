@@ -1,17 +1,23 @@
-import './App.css'
-import Login from './Authentication/Login'
-import Dashboard from './Dashboard/Dashboard'
-import { useAuthStore } from './Store/useAuthStore'
+import './App.css';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './Authentication/Login';
+import Dashboard from './Dashboard/Dashboard';
+import CreateUser from './Users/CreateUser';
+import { useAuthStore } from './Store/useAuthStore';
 
 function App() {
   const token = useAuthStore((s) => s.accessToken);
 
   return (
-    <div>
-      {token ? <Dashboard /> : <Login />}
-    </div>
-  )
+    // <Router>
+      <Routes>
+        <Route path="/login" element={token ? <Navigate to="/dashboard" /> : <Login />} />
+        <Route path="/dashboard" element={token ? <Dashboard /> : <Navigate to="/login" />} />
+        <Route path="/create-user" element={token ? <CreateUser /> : <Navigate to="/login" />} />
+        <Route path="*" element={<Navigate to={token ? "/dashboard" : "/login"} />} />
+      </Routes>
+    // </Router>
+  );
 }
 
-export default App
-
+export default App;

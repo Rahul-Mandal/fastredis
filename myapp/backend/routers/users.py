@@ -34,9 +34,13 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 
 # ---------------- List All Users ----------------
 @router.get("/list", response_model=List[UserResponse])
-def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return get_users(db, skip=skip, limit=limit)
-
+def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
+    print(current_user.__dict__,'-----------cur')
+    # user_rec = get_user(db, int(current_user.sub))
+    if current_user:
+        return get_users(db, skip=skip, limit=limit)
+    else:
+        print("ro record found")
 
 # ---------------- Update User ----------------
 @router.put("/{user_id}", response_model=UserResponse)
