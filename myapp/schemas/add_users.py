@@ -34,7 +34,7 @@ class UserUpdate(BaseModel):
 # ------------ Response Schema (no password) ------------
 class UserResponse(UserBase):
     id: int
-    is_active: bool
+    is_active: Optional[bool] = False
 
     class Config:
         orm_mode = True

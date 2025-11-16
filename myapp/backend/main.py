@@ -319,7 +319,7 @@ def super_secret(current_user=Depends(role_required("superadmin"))):
 
 from fastapi import FastAPI
 from myapp.database.connect_db import Base, engine
-from myapp.backend.routers import auth_router, user_router
+from myapp.backend.routers import auth_router, user_router, users
 
 Base.metadata.create_all(bind=engine)
 
@@ -327,6 +327,7 @@ Base.metadata.create_all(bind=engine)
 
 app.include_router(auth_router.router)
 app.include_router(user_router.router)
+app.include_router(users.router)
 
 
 

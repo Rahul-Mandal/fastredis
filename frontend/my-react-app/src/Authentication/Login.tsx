@@ -51,12 +51,15 @@
 import React, { useState , useEffect} from 'react';
 import axios from 'axios';
 import { useAuthStore } from '../Store/useAuthStore';
+import { useNavigate } from "react-router-dom";
 
 
 function Login() {
+  const navigate = useNavigate();
   const [user, updateUser] = useState({ email: "", password: "" });
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const setAccessTokens = useAuthStore.getState().setAccessToken;
+
 
   const handleUpdate = (field: string, value: string) => {
     updateUser((prev) => ({
@@ -86,6 +89,7 @@ function Login() {
         // Refresh token is set by backend as HttpOnly cookie, cannot access via JS
         console.log('Refresh token should be in HttpOnly cookie.');
       }
+      navigate("/dashboard"); 
     } catch (err) {
       console.log('Login failed:', err);
     }

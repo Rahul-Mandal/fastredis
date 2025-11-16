@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from myapp.database.connect_db import get_db
-from myapp.schemas.user import UserCreate, UserResponse, UserUpdate
-from myapp.crud.users import create_user, get_user, get_users, update_user, delete_user. get_user_by_email
-from myapp.auth.dependencies import get_current_user
+from myapp.schemas.add_users import UserCreate, UserResponse, UserUpdate
+from myapp.crud.users import create_user, get_user, get_users, update_user, delete_user, get_user_by_email
+from myapp.backend.auth.dependencies import get_current_user
+from typing import List
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -23,7 +24,7 @@ def read_current_user(current_user=Depends(get_current_user)):
 
 
 # ---------------- Get User by ID ----------------
-@router.get("/{user_id}", response_model=UserResponse)
+@router.get("/user/{user_id}", response_model=UserResponse)
 def read_user(user_id: int, db: Session = Depends(get_db)):
     user = get_user(db, user_id)
     if not user:
@@ -32,7 +33,7 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 
 
 # ---------------- List All Users ----------------
-@router.get("/", response_model=list[UserResponse])
+@router.get("/list", response_model=List[UserResponse])
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return get_users(db, skip=skip, limit=limit)
 
