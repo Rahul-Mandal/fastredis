@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends
 from myapp.backend.auth.role_checker import role_required, permission_required
 from myapp.backend.auth.dependencies import get_current_user
 
-router = APIRouter(prefix="/users", tags=["Users"])
+router = APIRouter(prefix="/user", tags=["Users"])
 
 @router.get("/admin-only")
 def admin_data(user=Depends(role_required("admin"))):
@@ -16,6 +16,8 @@ def admin_data(user=Depends(role_required("admin"))):
 @router.get("/update")
 def update_data(user=Depends(permission_required("edit_profile"))):
     return {"msg": "You can edit profile!"}
+
+
 
 
 @router.get("/me")

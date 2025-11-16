@@ -232,7 +232,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 # from auth_utils import create_access_token
 
-app = FastAPI()
+# app = FastAPI()
 
 fake_users = {
     "admin@example.com": {"password": "admin123", "role": "admin"},
@@ -323,7 +323,7 @@ from myapp.backend.routers import auth_router, user_router
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+# app = FastAPI()
 
 app.include_router(auth_router.router)
 app.include_router(user_router.router)

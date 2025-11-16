@@ -3,7 +3,7 @@
 
 // function Login (){
 
-//     const [user, updateUser] = useState({username:"",password:""})
+//     const [user, updateUser] = useState({email:"",password:""})
 
 //     const handleUpdate = (field, value) => {
 //     updateUser((prev) => ({
@@ -31,12 +31,12 @@
 // return(
 //     <div>
 //       <div>
-//       <label htmlFor="username">Name:</label>
-//         <input type='text' value={user.username} placeholder='username'
-//         onChange={(e)=> handleUpdate("username",e.target.value)} />
+//       <label htmlFor="email">Name:</label>
+//         <input type='text' value={user.email} placeholder='email'
+//         onChange={(e)=> handleUpdate("email",e.target.value)} />
 //         </div>
 //         <div>
-//         <label htmlFor="username">Password:</label>
+//         <label htmlFor="email">Password:</label>
 //         <input type='password' value={user.password} placeholder='password'
 //         onChange ={(e) =>handleUpdate("password",e.target.value)} />
 //         </div>
@@ -48,12 +48,15 @@
 // export default Login;
 
 
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import axios from 'axios';
+import { useAuthStore } from '../Store/useAuthStore';
+
 
 function Login() {
-  const [user, updateUser] = useState({ username: "", password: "" });
+  const [user, updateUser] = useState({ email: "", password: "" });
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const setAccessTokens = useAuthStore.getState().setAccessToken;
 
   const handleUpdate = (field: string, value: string) => {
     updateUser((prev) => ({
@@ -65,7 +68,7 @@ function Login() {
   const postdata = async () => {
     try {
       const response = await axios.post(
-        'http://127.0.0.1:8000/token',
+        'http://127.0.0.1:8000/auth/login',
         user,
         { withCredentials: true } // ensures HttpOnly refresh cookie is sent/received
       );
@@ -74,7 +77,11 @@ function Login() {
         console.log('Login successful:', response.data);
 
         // Store access token in memory
-        setAccessToken(response.data.access_token);
+        setAccessTokens(response.data.access_token);
+        // setAccessToken(res.data.access_token);
+
+        // Read latest value
+        console.log("Token set to:", useAuthStore.getState().accessToken);
 
         // Refresh token is set by backend as HttpOnly cookie, cannot access via JS
         console.log('Refresh token should be in HttpOnly cookie.');
@@ -84,15 +91,31 @@ function Login() {
     }
   };
 
+
+  //  useEffect(() => {
+  //   console.log("Access token changed:", accessToken);
+  // }, [accessToken]);
+
+  // return accessToken;
+
+
+const accessTokens = useAuthStore((s) => s.accessToken);
+
+// Watch the token
+useEffect(() => {
+  console.log("ACCESS TOKEN UPDATED:", accessTokens);
+}, [accessToken]);
+
+
   return (
     <div>
       <div>
-        <label htmlFor="username">Name:</label>
+        <label htmlFor="email">Name:</label>
         <input
           type='text'
-          value={user.username}
-          placeholder='username'
-          onChange={(e) => handleUpdate("username", e.target.value)}
+          value={user.email}
+          placeholder='email'
+          onChange={(e) => handleUpdate("email", e.target.value)}
         />
       </div>
 

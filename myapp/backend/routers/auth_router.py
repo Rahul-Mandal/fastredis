@@ -12,19 +12,33 @@ from myapp.models.user import User
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
-@router.post("/login", response_model=TokenResponse)
+# @router.post("/login", response_model=TokenResponse)
+# def login(data: LoginRequest):
+#     db = SessionLocal()
+#     user = db.query(User).filter(User.email == data.email).first()
+
+#     if not user or not verify_password(data.password, user.password):
+#         raise HTTPException(401, "Invalid credentials")
+
+#     payload = {"sub": str(user.id)}
+
+#     return TokenResponse(
+#         access_token=create_access_token(payload),
+#         refresh_token=create_refresh_token(payload)
+#     )
+
+
+@router.post('/login', response_model=TokenResponse)
 def login(data: LoginRequest):
     db = SessionLocal()
     user = db.query(User).filter(User.email == data.email).first()
-
     if not user or not verify_password(data.password, user.password):
-        raise HTTPException(401, "Invalid credentials")
-
-    payload = {"sub": user.id}
+        return HTTPException(401, "Invalid credentails")
+    payload = {"sub": str(user.id)}
 
     return TokenResponse(
-        access_token=create_access_token(payload),
-        refresh_token=create_refresh_token(payload)
+        access_token = create_access_token(payload),
+        refresh_token = create_refresh_token(payload)
     )
 
 @router.post("/refresh", response_model=TokenResponse)
