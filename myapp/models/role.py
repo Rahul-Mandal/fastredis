@@ -3,6 +3,8 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from myapp.database.connect_db import Base
 
+from myapp.models.permission import RolePermission
+
 class Role(Base):
     __tablename__ = "roles"
 

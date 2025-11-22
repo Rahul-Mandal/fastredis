@@ -52,7 +52,7 @@ def update_existing_user(user_id: int, user_in: UserUpdate, db: Session = Depend
 
 
 # ---------------- Delete User ----------------
-@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/del/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_existing_user(user_id: int, db: Session = Depends(get_db)):
     success = delete_user(db, user_id)
     if not success:

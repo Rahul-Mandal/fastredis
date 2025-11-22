@@ -48,92 +48,250 @@
 // export default Login;
 
 
-import React, { useState , useEffect} from 'react';
+// import React, { useState , useEffect} from 'react';
+// import axios from 'axios';
+// import { useAuthStore } from '../Store/useAuthStore';
+// import { useNavigate } from "react-router-dom";
+
+
+// function Login() {
+//   const navigate = useNavigate();
+//   const [user, updateUser] = useState({ email: "", password: "" });
+//   const [accessToken, setAccessToken] = useState<string | null>(null);
+//   const setAccessTokens = useAuthStore.getState().setAccessToken;
+
+
+//   const handleUpdate = (field: string, value: string) => {
+//     updateUser((prev) => ({
+//       ...prev,
+//       [field]: value,
+//     }));
+//   };
+
+//   const postdata = async () => {
+//     try {
+//       const response = await axios.post(
+//         'http://127.0.0.1:8000/auth/login',
+//         user,
+//         { withCredentials: true } // ensures HttpOnly refresh cookie is sent/received
+//       );
+
+//       if (response && response.data) {
+//         console.log('Login successful:', response.data);
+
+//         // Store access token in memory
+//         setAccessTokens(response.data.access_token);
+//         // setAccessToken(res.data.access_token);
+
+//         // Read latest value
+//         console.log("Token set to:", useAuthStore.getState().accessToken);
+
+//         // Refresh token is set by backend as HttpOnly cookie, cannot access via JS
+//         console.log('Refresh token should be in HttpOnly cookie.');
+//       }
+//       navigate("/dashboard"); 
+//     } catch (err) {
+//       console.log('Login failed:', err);
+//     }
+//   };
+
+
+//   //  useEffect(() => {
+//   //   console.log("Access token changed:", accessToken);
+//   // }, [accessToken]);
+
+//   // return accessToken;
+
+
+// const accessTokens = useAuthStore((s) => s.accessToken);
+
+// // Watch the token
+// useEffect(() => {
+//   console.log("ACCESS TOKEN UPDATED:", accessTokens);
+// }, [accessTokens]);
+
+
+//   return (
+//     <div>
+//       <div>
+//         <label htmlFor="email">Name:</label>
+//         <input
+//           type='text'
+//           value={user.email}
+//           placeholder='email'
+//           onChange={(e) => handleUpdate("email", e.target.value)}
+//         />
+//       </div>
+
+//       <div>
+//         <label htmlFor="password">Password:</label>
+//         <input
+//           type='password'
+//           value={user.password}
+//           placeholder='password'
+//           onChange={(e) => handleUpdate("password", e.target.value)}
+//         />
+//       </div>
+
+//       <button type='button' onClick={postdata}>Login</button>
+//     </div>
+//   );
+// }
+
+// export default Login;
+
+
+// import React, { useState } from 'react';
+// import axios from 'axios';
+// import { useAuthStore } from '../Store/useAuthStore';
+// import { useNavigate } from "react-router-dom";
+
+// function Login() {
+//   const navigate = useNavigate();
+
+//   const [user, setUser] = useState({ email: "", password: "" });
+//   const [error, setError] = useState("");
+
+//   const setAccessToken = useAuthStore((s) => s.setAccessToken);
+
+//   const handleUpdate = (field: string, value: string) => {
+//     setUser((prev) => ({
+//       ...prev,
+//       [field]: value,
+//     }));
+//   };
+
+//   const postdata = async () => {
+//     setError("");  // clear old errors
+
+//     try {
+//       const response = await axios.post(
+//         "http://127.0.0.1:8000/auth/login",
+//         user,
+//         { withCredentials: true }
+//       );
+
+//       if (response.data?.access_token) {
+//         setAccessToken(response.data.access_token);
+//         navigate("/dashboard");
+//       }
+
+//     } catch (err: any) {
+//       console.log("Login failed:", err);
+
+//       if (err.response?.status === 401) setError("Invalid email or password.");
+//       else setError("Something went wrong. Try again later.");
+//     }
+//   };
+
+//   return (
+//     <div>
+//       <h2>Login</h2>
+
+//       {/* error display */}
+//       {error && <p style={{ color: "red" }}>{error}</p>}
+
+//       <div>
+//         <label>Email:</label>
+//         <input
+//           type="text"
+//           value={user.email}
+//           placeholder="email"
+//           onChange={(e) => handleUpdate("email", e.target.value)}
+//         />
+//       </div>
+
+//       <div>
+//         <label>Password:</label>
+//         <input
+//           type="password"
+//           value={user.password}
+//           placeholder="password"
+//           onChange={(e) => handleUpdate("password", e.target.value)}
+//         />
+//       </div>
+
+//       <button type="button" onClick={postdata}>Login</button>
+//     </div>
+//   );
+// }
+
+// export default Login;
+
+
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuthStore } from '../Store/useAuthStore';
 import { useNavigate } from "react-router-dom";
 
-
 function Login() {
   const navigate = useNavigate();
-  const [user, updateUser] = useState({ email: "", password: "" });
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const setAccessTokens = useAuthStore.getState().setAccessToken;
+  const [user, setUser] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
 
+  // Zustand setter only (clean)
+  const setAccessToken = useAuthStore((s) => s.setAccessToken);
 
   const handleUpdate = (field: string, value: string) => {
-    updateUser((prev) => ({
+    setUser((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
 
   const postdata = async () => {
+    setError("");
+
     try {
       const response = await axios.post(
-        'http://127.0.0.1:8000/auth/login',
+        "http://127.0.0.1:8000/auth/login",
         user,
-        { withCredentials: true } // ensures HttpOnly refresh cookie is sent/received
+        { withCredentials: true }
       );
 
-      if (response && response.data) {
-        console.log('Login successful:', response.data);
-
-        // Store access token in memory
-        setAccessTokens(response.data.access_token);
-        // setAccessToken(res.data.access_token);
-
-        // Read latest value
-        console.log("Token set to:", useAuthStore.getState().accessToken);
-
-        // Refresh token is set by backend as HttpOnly cookie, cannot access via JS
-        console.log('Refresh token should be in HttpOnly cookie.');
+      if (response.data?.access_token) {
+        setAccessToken(response.data.access_token);
+        navigate("/dashboard");
       }
-      navigate("/dashboard"); 
-    } catch (err) {
-      console.log('Login failed:', err);
+
+    } catch (err: any) {
+      console.log("Login failed:", err);
+
+      if (err.response?.status === 401) {
+        setError("Invalid email or password.");
+      } else {
+        setError("Something went wrong. Try again later.");
+      }
     }
   };
 
-
-  //  useEffect(() => {
-  //   console.log("Access token changed:", accessToken);
-  // }, [accessToken]);
-
-  // return accessToken;
-
-
-const accessTokens = useAuthStore((s) => s.accessToken);
-
-// Watch the token
-useEffect(() => {
-  console.log("ACCESS TOKEN UPDATED:", accessTokens);
-}, [accessToken]);
-
-
   return (
     <div>
+      <h2>Login</h2>
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
       <div>
-        <label htmlFor="email">Name:</label>
+        <label>Email:</label>
         <input
-          type='text'
+          type="text"
           value={user.email}
-          placeholder='email'
+          placeholder="email"
           onChange={(e) => handleUpdate("email", e.target.value)}
         />
       </div>
 
       <div>
-        <label htmlFor="password">Password:</label>
+        <label>Password:</label>
         <input
-          type='password'
+          type="password"
           value={user.password}
-          placeholder='password'
+          placeholder="password"
           onChange={(e) => handleUpdate("password", e.target.value)}
         />
       </div>
 
-      <button type='button' onClick={postdata}>Login</button>
+      <button type="button" onClick={postdata}>Login</button>
     </div>
   );
 }

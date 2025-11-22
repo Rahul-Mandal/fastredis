@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from myapp.models.user import User
+from myapp.models.role import Role
 from myapp.schemas.add_users import UserCreate, UserUpdate
 from myapp.backend.auth.hashing import hash_password
 
@@ -77,3 +78,7 @@ def delete_user(db: Session, user_id: int) -> bool:
     db.delete(user)
     db.commit()
     return True
+
+
+def fetch_role(db, id: int):
+    return db.query(Role).filter(Role.id ==id).first()
