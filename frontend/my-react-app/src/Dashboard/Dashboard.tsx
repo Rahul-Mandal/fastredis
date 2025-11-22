@@ -144,6 +144,11 @@ export default function Dashboard (){
 
    
     <div>
+      <button onClick={() => navigate("/create-user")}>Add New User</button>
+<div className="p-4 bg-blue-500 text-white rounded">
+  Hello Tailwind 🚀
+</div>
+
       {users.map((user) =>(
         <div key={user.id} style={{margin: "10px"}}>
            
@@ -167,6 +172,7 @@ export default function Dashboard (){
           <button onClick={()=>handleDelete(user.id)}>Delete</button>
            </>
            )
+           
            }
           
            </div>
